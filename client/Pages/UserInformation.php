@@ -32,11 +32,11 @@
                                 <input type="tel" class="form-control" id="phone" value="+1234567890">
                             </div>
                             <div class="form-group">
-                                <label for="country">Quốc gia:</label>
+                                <label for="country">Vai trò:</label>
                                 <select class="form-control" id="country">
-                                    <option value="VN">Việt Nam</option>
-                                    <option value="US">Hoa Kỳ</option>
-                                    <option value="UK">Vương quốc Anh</option>
+                                    <option value="User">Người dùng</option>
+                                    <option value="Admin">Quản trị</option>
+                                    
                                 </select>
                             </div>
                             <div class="text-center">
