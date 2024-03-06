@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Mã hóa mật khẩu
     $password1 = password_hash($password1, PASSWORD_DEFAULT);
 
-    //Lưu vào CSDL
+    //Lưu vào <CSDL></CSDL>
     $conn = mysqli_connect('localhost', 'root', '0123456789', 'tlunews');
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
