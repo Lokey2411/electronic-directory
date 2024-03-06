@@ -30,6 +30,14 @@
                                 <label for="employee_code">Mã nhân viên</label>
                                 <input type="text" class="form-control" id="employee_code" placeholder="Nhập mã nhân viên">
                             </div>
+                            <label for="position">Vai trò :</label>
+                            <div class="form-group">
+                                <select name="position" id="position">
+                                    <option value="">--BẠN HÃY CHỌN VAI TRÒ DĂNG NHẬP--</option>
+                                    <option value="User">Người dùng</option>
+                                    <option value="Admin">Quản trị</option>
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary">Đăng ký</button>
                         </form>
                     </div>
