@@ -1,3 +1,10 @@
+<?php
+require_once '../function.php';
+$employees = getAllEmployees();
+// echo '<pre>';
+// print_r($employees);
+// echo '</pre>';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +27,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="dashboard.php">Trang chủ</a>
+                                <a class="nav-link" aria-current="page" href="../client/index.php">Trang chủ</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Quản lý danh mục</a>
@@ -29,7 +36,7 @@
                                 <a class="nav-link" href="#">Quản lý tin tức</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="users.php">Quản lý người dùng</a>
+                                <a class="nav-link active" href="employees.php">Quản lý nhân viên</a>
                             </li>
                         </ul>
                     </div>
@@ -44,29 +51,40 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md">
-                        <h3 class="text-center text-primary">DANH SÁCH TÀI KHOẢN NGƯỜI DÙNG</h3>
+                        <h3 class="text-center text-primary">DANH SÁCH DANH BẠ NHÂN VIÊN</h3>
                         <?php if (isset($_GET['message'])) : ?>
                             <div class="alert alert-success" role="alert">
                                 <?php echo $_GET['message'] ?>
                             </div>
                         <?php endif; ?>
-                        <a href="user_add.php" class="btn btn-primary">Thêm mới</a>
+                        <a href="employee_add.php" class="btn btn-primary">Thêm mới</a>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">STT</th>
-                                    <th scope="col">Tên đăng nhập</th>
+                                    <th scope="col">Họ tên</th>
+                                    <th scope="col">Địa chỉ</th>
                                     <th scope="col">Thư điện tử</th>
-                                    <th scope="col" colspan="4" class="text-center">Thao tác</th>
+                                    <th scope="col">Số điện thoại</th>
+                                    <th scope="col">Vị trí công tác</th>
+                                    <th scope="col">Ảnh</th>
+                                    <th scope="col">Đơn vị trực thuộc</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
+                                <?php $i=0; ?>
+                                <?php foreach ($employees as $key => $employees) : ?>
+                                    <tr>
+                                        <th scope="row"><?php echo ++$i; ?></th>
+                                        <td><?php echo $employees['FullName']; ?></td>
+                                        <td><?= $employees['Address']; ?></td>
+                                        <td><?= $employees['Email']; ?></td>
+                                        <td><?= $employees['MobilePhone']; ?></td>
+                                        <td><?= $employees['Position']; ?></td>
+                                        <td><?= $employees['Avatar']; ?></td>
+                                        <td><?= $employees['DepartmentID']; ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">

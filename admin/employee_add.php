@@ -20,7 +20,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="dashboard.php">Trang chủ</a>
+                                <a class="nav-link" aria-current="page" href="../client/index.php">Trang chủ</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Quản lý danh mục</a>
@@ -29,7 +29,7 @@
                                 <a class="nav-link" href="#">Quản lý tin tức</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="users.php">Quản lý người dùng</a>
+                                <a class="nav-link active" href="users.php">Quản lý nhân viên</a>
                             </li>
                         </ul>
                     </div>
@@ -44,13 +44,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md">
-                        <h3 class="text-center text-primary">THÊM MỚI TÀI KHOẢN NGƯỜI DÙNG</h3>
+                        <h3 class="text-center text-primary">THÊM MỚI DANH BẠ NHÂN VIÊN</h3>
                         <?php if (isset($_GET['error'])) : ?>
                             <div class="alert alert-success" role="alert">
                                 <?php echo $_GET['error'] ?>
                             </div>
                         <?php endif ?>
-                        <form action="user_add_process.php" method="post">
+                        <form action="employee_add_process.php" method="post">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Tên người dùng</label>
                                 <input type="text" class="form-control" id="username" name="username">

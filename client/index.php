@@ -60,9 +60,9 @@ require "./View/News&Events.php";
   echo Navbar();
   ?>
   <!-- banner -->
-  <div class="Banner">
-    <img src="https://www.tlu.edu.vn/Portals/0/Thumbnails/web1.jpg" class="img-fluid rounded inline-block w-100 h-75" alt="..." />
-  </div>
+  <?php 
+    echo Banner();
+  ?>
   <!-- HighlightedList -->
   <div>
     <div class="h1 text-center text-white px-5 py-3 rounded bgGradient">Danh sách nổi bật</div>

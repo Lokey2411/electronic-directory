@@ -1,0 +1,56 @@
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(255),
+    Address VARCHAR(255),
+    Email VARCHAR(255),
+    Phone VARCHAR(15),
+    Logo VARCHAR(255),
+    Website VARCHAR(255),
+    ParentDepartmentID INT,
+    FOREIGN KEY (ParentDepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Departments (DepartmentID, DepartmentName, Address, Email, Phone, Logo, Website, ParentDepartmentID)
+VALUES
+(1, 'Ban Giám Hiệu', '123 Đường A, TP.Hà Nội', 'rector@tlu.edu.vn', '123-456-7890', 'tlu_logo.png', 'http://tlu.edu.vn', NULL),
+(2, 'Khoa Kỹ thuật Thủy lợi', '456 Đường B, TP.Hà Nội', 'kttl@tlu.edu.vn', '987-654-3210', 'kttl_logo.png', 'http://kttl.tlu.edu.vn', 1),
+(3, 'Khoa Nông học', '789 Đường C, TP.Hà Nội', 'nonghoc@tlu.edu.vn', '555-123-4567', 'nonghoc_logo.png', 'http://nonghoc.tlu.edu.vn', 1),
+(4, 'Phòng Quản lý Sinh viên', '101 Đường D, TP.Hà Nội', 'sv@tlu.edu.vn', '111-222-3333', 'sv_logo.png', 'http://sv.tlu.edu.vn', 1),
+(5, 'Viện Nghiên cứu và Phát triển Công nghệ', '202 Đường E, TP.Hà Nội', 'nckh@tlu.edu.vn', '444-555-6666', 'nckh_logo.png', 'http://nckh.tlu.edu.vn', 1),
+(6, 'Khoa Kinh tế Nông nghiệp', '303 Đường F, TP.Hà Nội', 'kt-nn@tlu.edu.vn', '777-888-9999', 'kt-nn_logo.png', 'http://kt-nn.tlu.edu.vn', 3);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FullName VARCHAR(255),
+    Address VARCHAR(255),
+    Email VARCHAR(255),
+    MobilePhone VARCHAR(15),
+    Position VARCHAR(255),
+    Avatar VARCHAR(255),
+    DepartmentID INT,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Employees (EmployeeID, FullName, Address, Email, MobilePhone, Position, Avatar, DepartmentID)
+VALUES
+(1, 'Nguyễn Văn A', '123 Đường X, TP.Hà Nội', 'a.nguyen@example.com', '123-456-7890', 'Giáo viên', 'avatar_a.jpg', 2),
+(2, 'Trần Thị B', '456 Đường Y, TP.Hà Nội', 'b.tran@example.com', '987-654-3210', 'Kế toán viên', 'avatar_b.jpg', 4),
+(3, 'Lê Văn C', '789 Đường Z, TP.Hà Nội', 'c.le@example.com', '555-123-4567', 'Nhân viên NCKH', 'avatar_c.jpg', 5),
+(4, 'Phạm Thị D', '101 Đường W, TP.Hà Nội', 'd.pham@example.com', '111-222-3333', 'Sinh viên thực tập', 'avatar_d.jpg', 2),
+(5, 'Ngô Xuân E', '202 Đường U, TP.Hà Nội', 'e.ngo@example.com', '444-555-6666', 'Nhân viên quản lý sinh viên', 'avatar_e.jpg', 4);
+
+CREATE TABLE Users (
+    Username VARCHAR(255) PRIMARY KEY,
+    Password VARCHAR(255),
+    Role VARCHAR(50),
+    EmployeeID INT,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Users (Username, Password, Role, EmployeeID)
+VALUES
+('admin1', 'admin1password', 'admin', 1),
+('user1', 'user1password', 'regular', 2),
+('user2', 'user2password', 'regular', 3),
+('user3', 'user3password', 'regular', 4),
+('user4', 'user4password', 'regular', 5);categories
