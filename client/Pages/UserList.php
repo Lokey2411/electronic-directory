@@ -18,9 +18,6 @@ require '../View/Banner.php';
     <?php
     echo Navbar();
     ?>
-    <?php
-    echo Banner();
-    ?>
     <div>
         <div class="h1 text-center text-white px-5 py-3 rounded bgGradient" style="background-image: linear-gradient(
     to right,

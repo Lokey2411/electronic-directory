@@ -27,6 +27,8 @@ function Navbar()
           </li>
           <li class="nav-item"><a class="nav-link" href="./Authentication/LoginUser.php">Đăng Nhập</a></li>
           <li class="nav-item"><a class="nav-link" href="./Authentication/SignUp.php">Đăng ký</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Admin/TableUserList.php">Admin</a></li>
+          <li class="nav-item"><a class="nav-link" href="./Pages/UserInformation.php">Thông tin</a></li>
         </ul>
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />

@@ -27,6 +27,16 @@
                                 <label for="password">Mật khẩu</label>
                                 <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
                             </div>
+                            <label for="position">Vai trò :</label>
+                            <div class="form-group">
+                                <select name="position" id="position">
+                                    <option value="">--BẠN HÃY CHỌN VAI TRÒ DĂNG NHẬP--</option>
+                                    <option value="User">Người dùng</option>
+                                    <option value="Admin">Quản trị</option>
+
+                                </select>
+                            </div>
+
                             <button type="submit" class="btn btn-primary">Đăng nhập</button>
                             <div class="text-center">
                                 <a href="#" class="text-center">Quên mật khẩu?</a>
