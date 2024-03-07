@@ -1,10 +1,16 @@
 <?php
 function Navbar()
 {
+  session_start();
+  $isLoggedin = isset($_SESSION["Role"]);
+  $isAdmin = $isLoggedin && $_SESSION["Role"] == "Admin";
+  $authItem = $isLoggedin ? '<li class="nav-item"><a class="nav-link" href='.BASE_URL.'/server/auth/logout.php>Đăng xuất</a></li>' :'<li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Authentication&action=LoginUser>Đăng Nhập</a></li>
+  <li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Authentication&action=SignUp>Đăng ký</a></li>';
+  $adminItem = $isAdmin?'<li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Admin&action=TableUserList>Admin</a></li>':"";
   return '<!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light ">
     <div class="container-fluid">
-      <a class="navbar-brand" href="../index.php"><img class="w-50 h-50" src="https://www.tlu.edu.vn/Portals/_default/skins/tluvie/images/logo.png" alt="" /></a>
+      <a class="navbar-brand" style="width:25%" href='.BASE_URL.'><img class="w-100 h-50" src="https://www.tlu.edu.vn/Portals/_default/skins/tluvie/images/logo.png" alt="" /></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -21,13 +27,10 @@ function Navbar()
               Danh sách danh bạ
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="./Pages/UserList.php">Danh bạ đơn vị</a></li>
+              <li><a class="dropdown-item" href='.BASE_URL.'?controller=Pages&action=UserList>Danh bạ đơn vị</a></li>
               <li><a class="dropdown-item" href="#">Danh bạ giảng viên</a></li>
             </ul>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="./Authentication/LoginUser.php">Đăng Nhập</a></li>
-          <li class="nav-item"><a class="nav-link" href="./Authentication/SignUp.php">Đăng ký</a></li>
-          <li class="nav-item"><a class="nav-link" href="./Admin/TableUserList.php">Admin</a></li>
+          </li>'.$authItem.$adminItem.'
           <li class="nav-item"><a class="nav-link" href="./Pages/UserInformation.php">Thông tin</a></li>
         </ul>
         <form class="d-flex">

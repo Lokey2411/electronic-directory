@@ -1,4 +1,8 @@
 <?php
+    define("ROOT", dirname(__FILE__,2));
+    define("CLIENT", ROOT."/client");
+    define("SERVER", ROOT."/server");
+    define("BASE_URL", "http://localhost/electronic-phonebook/");
     $host = "localhost";
     $user = "root";
     $password = "";
@@ -15,16 +19,18 @@
     // Cố gắng tạo cơ sở dữ liệu
     $sql = "CREATE DATABASE IF NOT EXISTS $db";
     if (mysqli_query($con, $sql)) {
-        echo "CreateDB successfully";
     } else {
         echo "Error creating database: " . mysqli_error($con);
     }
 
     // Chọn cơ sở dữ liệu
     mysqli_select_db($con, $db);
-    function getConnection(){
+    function getDBConnection(){
         global $con;
         return $con;
+    }
+    function navigate($url){
+        header("Location: ".$url);
     }
     function queryCommand($sql){
         // excute sql 

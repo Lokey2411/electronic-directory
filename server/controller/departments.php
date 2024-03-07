@@ -12,7 +12,7 @@
         return $departments;
     }
     function getDepartmentById($id) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "SELECT * FROM departments WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "i", $id);
@@ -24,7 +24,7 @@
         return $department;
     }
     function addDepartment($name, $description) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "INSERT INTO departments (name, description) VALUES (?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "ss", $name, $description);
@@ -33,7 +33,7 @@
         return $result;
     }
     function updateDepartment($id, $name, $description) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "UPDATE departments SET name = ?, description = ? WHERE id =
         ?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -43,7 +43,7 @@
         return $result;
     }
     function deleteDepartment($id) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "DELETE FROM departments WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "i", $id);
@@ -52,7 +52,7 @@
         return $result;
     }
     function isDepartmentExist($id) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "SELECT COUNT(*) FROM departments WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "i", $id);
@@ -64,7 +64,7 @@
         return $count > 0;
     }
     function searchDepartments($keyword) {
-        $conn = getConnection();
+        $conn = getDBConnection();
         $sql = "SELECT * FROM departments WHERE name LIKE ? OR description LIKE
         ?";
         $keyword = "%$keyword%";
