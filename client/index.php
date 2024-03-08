@@ -51,6 +51,15 @@ require CLIENT."/Pages/Introduce.php";
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script>
+    fetch("<?=BASE_URL.'server/controller/employees.controller.php'?>").then(res => res.json()).then(data => {
+        console.log(data);
+        document.getElementById("js-num-employees").innerText = data.length;
+    });
+    fetch("<?=BASE_URL.'server/controller/departments.controller.php'?>").then(res => res.json()).then(data => {
+        document.getElementById("js-num-departments").innerText = data.length;
+    }).catch(console.log)
+    </script>
 </body>
 
 </html>

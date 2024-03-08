@@ -31,8 +31,8 @@ function Introduce()
     <div class="row">
         <div class="col-md-6">
             <h2>Thống kê số lượng đơn vị và nhân viên</h2>
-            <p>Số lượng đơn vị: <span class="badge badge-primary">50</span></p>
-            <p>Tổng số nhân viên: <span class="badge badge-primary">1000</span></p>
+            <p>Số lượng đơn vị: <span class="badge badge-primary" id="js-num-departments">0</span></p>
+            <p>Tổng số nhân viên: <span class="badge badge-primary" id="js-num-employees">0</span></p>
         </div>
     </div>
 </div>
