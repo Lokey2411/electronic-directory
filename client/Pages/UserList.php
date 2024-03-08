@@ -33,7 +33,7 @@ require CLIENT.'/View/Banner.php';
         <table class="table table-hover table-dark">
             <thead>
                 <tr>
-                    <th scope="col">STT</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Tên</th>
                     <th scope="col">Vị trí</th>
                     <th scope="col">Số điện thoại</th>

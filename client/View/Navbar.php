@@ -4,8 +4,7 @@ function Navbar()
   session_start();
   $isLoggedin = isset($_SESSION["Role"]);
   $isAdmin = $isLoggedin && $_SESSION["Role"] == "Admin";
-  $authItem = $isLoggedin ? '<li class="nav-item"><a class="nav-link" href='.BASE_URL.'/server/auth/logout.php>Đăng xuất</a></li>' :'<li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Authentication&action=LoginUser>Đăng Nhập</a></li>
-  <li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Authentication&action=SignUp>Đăng ký</a></li>';
+  $authItem = $isLoggedin ? '<li class="nav-item"><a class="nav-link" href='.BASE_URL.'/server/auth/logout.php>Đăng xuất</a></li>' :'<li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Authentication&action=LoginUser>Đăng Nhập</a>';
   $adminItem = $isAdmin?'<li class="nav-item"><a class="nav-link" href='.BASE_URL.'?controller=Admin&action=TableUserList>Admin</a></li> <li class="nav-item"><a class="nav-link" href="?controller=Pages&action=UserInformation">Thông tin</a></li>':"";
   return '<!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light ">

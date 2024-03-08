@@ -42,13 +42,6 @@
                                     placeholder="Nhập mã nhân viên" name="employeeId">
                             </div>
                             <label for="Role">Vai trò :</label>
-                            <div class="form-group">
-                                <select name="Role" id="position">
-                                    <option value="User">--BẠN HÃY CHỌN VAI TRÒ DĂNG NHẬP--</option>
-                                    <option value="User">Người dùng</option>
-                                    <option value="Admin">Quản trị</option>
-                                </select>
-                            </div>
                             <button type="submit" class="btn btn-primary">Đăng ký</button>
                         </form>
                     </div>
