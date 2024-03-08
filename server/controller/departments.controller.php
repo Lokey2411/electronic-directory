@@ -2,14 +2,14 @@
     require_once '../config.php';
     // Hàm lấy danh sách bộ phận
     function getDepartments() {
-        $sql = "SELECT * FROM departments";
-        $result = queryCommand($sql);
-        $departments = array();
-        while ($row = mysqli_fetch_assoc($result)) {
-            $departments[] = $row;
+        $con = getDBConnection();
+        $result = $con->query("SELECT * FROM departments");
+        if($result){
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
-        mysqli_free_result($result);
-        return $departments;
+        else{
+            return null;
+        }
     }
     function getDepartmentById($id) {
         $conn = getDBConnection();
@@ -78,4 +78,5 @@
         }
         return $departments;
     }   
+    echo json_encode(getDepartments());
 ?>
