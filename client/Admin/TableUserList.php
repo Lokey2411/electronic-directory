@@ -42,9 +42,9 @@ require '../View/Navbar.php';
                                     <th scope="row">1</th>
                                     <td>Mark</td>
                                     <td>Otto</td>
-                                    <td><i class="fa-solid fa-check fs-5 d-flex justify-content-center "></i></td>
+                                    <td><a href="../Pages//UserInformation.php"><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
                                     <td><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></td>
-                                    
+
                                 </tr>
                             </tbody>
                         </table>
