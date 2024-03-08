@@ -13,7 +13,7 @@
             $_SESSION["password"] = $password;
             $_SESSION["Role"] = $user["Role"];
             echo json_encode(array('status' => 'success'));
-            header("location:".BASE_URL);
+            navigate(BASE_URL."");
         }
         else{
             // echo BASE_URL."/?controller=Authentication&action=LoginUser";

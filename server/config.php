@@ -2,6 +2,7 @@
     define("ROOT", dirname(__FILE__,2));
     define("CLIENT", ROOT."/client");
     define("SERVER", ROOT."/server");
+    define("UPLOAD", ROOT."/assets/uploads");
     define("BASE_URL", "http://localhost/electronic-phonebook/");
     $host = "localhost";
     $user = "root";
