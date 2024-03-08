@@ -22,8 +22,9 @@
                     </div>
                     <div class="card-body">
                         <h3>John Doe</h3>
-                        <form id="edit-user-form" method="post"
-                            action=<?=BASE_URL.'server/controller/user.controller.php'?> enctype="multipart/form-data">
+                        <form id="edit-user-form" method="post" action=<?=isset($_GET['id'])?
+                            BASE_URL.'server/controller/user.controller.php?id='.$_GET['id']:
+                            BASE_URL.'server/controller/user.controller.php'?> enctype="multipart/form-data">
                             <?php include_once CLIENT.'/NoticeAuthentication/getError.php' ?>
                             <label for="avatar">Chỉnh sửa ảnh đại diện:</label>
                             <input type="file" name="avatar" id="js-upload-image" />
@@ -51,7 +52,12 @@
         </div>
     </div>
     <script>
-    fetch("<?=BASE_URL.'server/controller/user.controller.php'?>").then(res => res.json()).then(data => {
+    const isGetData = <?= isset($_GET['id']) ? true : false; ?>;
+    const responseLink = isGetData ?
+        "<?=BASE_URL.'server/controller/admin.controller.php?id='.$_GET['id'] ?>" :
+        "<?=BASE_URL.'server/controller/user.controller.php'?>";
+    console.log(responseLink);
+    fetch(responseLink).then(res => res.json()).then(data => {
         // console.log("<?=UPLOAD?>" + "/" + data.avatar);
         console.log(data);
         document.getElementById("js-image-preview").src = "<?=BASE_URL?>assets/uploads/images/" + data
@@ -59,8 +65,10 @@
         document.getElementById("name").value = data.FullName;
         document.getElementById("email").value = data.Email;
         document.getElementById("phone").value = data.MobilePhone;
-    }).catch(console.log)
+    }).catch(console.log);
     </script>
+
+
 </body>
 
 </html>

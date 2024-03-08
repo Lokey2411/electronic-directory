@@ -1,5 +1,7 @@
 <?php
     require_once "../config.php";
+    $requestUrl = BASE_URL."?controller=Pages&action=UserInformation";
+
     function uploadImage(){
         if(!isset($_FILES["avatar"])) return NULL;
         $now   = new DateTime(); //this returns the current date time
@@ -44,37 +46,71 @@
             }
         }
     }
+    function updateInformationWithSession(){
+        global $requestUrl;
+        $EmployeeID = $_SESSION["EmployeeID"];
+        $name = $_POST["name"];
+        $email = $_POST["email"];
+        $phone = $_POST["phone"];
+        $avatar = uploadImage();
+        $sql = $avatar!==null?
+        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = '$EmployeeID'":
+        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = '$EmployeeID'";   
+        $result = queryCommand($sql);
+            //insert data into database 
+        if($result){
+            navigate(BASE_URL."");
+        }
+        else{
+            navigate($requestUrl."&error=Cập nhật thất bại");
+        }
+        }
+    function updateInformationWithGetMethod(){
+        global $requestUrl;
+        $EmployeeID = $_GET["id"];
+        $name = $_POST["name"];
+        $email = $_POST["email"];
+        $phone = $_POST["phone"];
+        $avatar = uploadImage();
+        $sql = $avatar!==null?
+        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = $EmployeeID":
+        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = $EmployeeID";
+        $result = queryCommand($sql);
+        if($result){
+            navigate(BASE_URL."");
+        }
+        else{
+            navigate($requestUrl."&error=Cập nhật thất bại");
+        }
+    }
     // post method for update user
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
             $requestUrl = BASE_URL."?controller=Pages&action=UserInformation";
             session_start();
-            
+            // handle if user update its profile
             if(isset($_SESSION["Role"])) {
                 if($_SESSION["Role"] == "Admin") {
-                    // handle with admin
-                    $EmployeeID = $_SESSION["EmployeeID"];
-                    $name = $_POST["name"];
-                    $email = $_POST["email"];
-                    $phone = $_POST["phone"];
-                    $avatar = uploadImage();
-                    if ($avatar !== null) {
-                    // Nếu $avatar không phải là null, thực hiện câu truy vấn update
-                    $result = queryCommand("UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = '$EmployeeID'");
-                } else {
-                    // Nếu $avatar là null, chỉ cập nhật các trường khác mà không cập nhật avatar
-                    $result = queryCommand("UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = '$EmployeeID'");
-                }
-            //insert data into database 
-                    if($result){
-                        navigate(BASE_URL."");
+                    if(isset($_GET["id"])){
+                        // echo "here";
+                        updateInformationWithGetMethod();
                     }
                     else{
-                        navigate($requestUrl."&error=Cập nhật thành công");
+                        // echo "here";
+                        updateInformationWithSession();
                     }
                 }
                 else{
-                    echo "not admin";
+                    if(isset($_GET["id"])){
+                        $id = $_GET["id"];
+                        if($id == $_SESSION["EmployeeID"])
+                            updateInformationWithGetMethod();
+                        else navigate($requestUrl ."&error=Bạn không thể chỉnh sửa thông tin của người này");
+                    }
+                    else{
+                        updateInformationWithSession();
+                    }
+                    navigate($requestUrl ."&error=Bạn không thể chỉnh sửa thông tin");
                 }
             }
             else{

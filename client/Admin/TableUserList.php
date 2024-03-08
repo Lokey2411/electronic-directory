@@ -25,9 +25,12 @@ require CLIENT.'/View/Navbar.php';
                 <div class="row">
                     <div class="col-md">
                         <h3 class="text-center text-primary">DANH SÁCH TÀI KHOẢN NGƯỜI DÙNG CHỜ DUYỆT</h3>
-                        <?php include_once CLIENT.'/NoticeAuthentication/GetError.php'; ?>
-                        <a href=<?= SERVER.'/controller/user.controller.php?action=create' ?>
-                            class="btn btn-primary">Thêm mới</a>
+                        <?php if (isset($_GET['message'])) : ?>
+                        <div class="alert alert-success" role="alert">
+                            <?php echo $_GET['message'] ?>
+                        </div>
+                        <?php endif; ?>
+                        <a href="user_add.php" class="btn btn-primary">Thêm mới</a>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -42,7 +45,8 @@ require CLIENT.'/View/Navbar.php';
                                     <th scope="row">1</th>
                                     <td>Mark</td>
                                     <td>Otto</td>
-                                    <td><i class="fa-solid fa-check fs-5 d-flex justify-content-center "></i></td>
+                                    <td><a href=<?=BASE_URL.'?controller=Pages&action=UserInformation&id=1'?>><i
+                                                class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
                                     <td><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></td>
 
                                 </tr>
