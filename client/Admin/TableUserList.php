@@ -24,32 +24,29 @@ require CLIENT.'/View/Navbar.php';
             <div class="container">
                 <div class="row">
                     <div class="col-md">
-                        <h3 class="text-center text-primary">DANH SÁCH TÀI KHOẢN NGƯỜI DÙNG CHỜ DUYỆT</h3>
+                        <h3 class="text-center text-primary">DANH SÁCH NHÂN VIÊN</h3>
                         <?php if (isset($_GET['message'])) : ?>
                         <div class="alert alert-success" role="alert">
                             <?php echo $_GET['message'] ?>
                         </div>
                         <?php endif; ?>
                         <a href="user_add.php" class="btn btn-primary">Thêm mới</a>
-                        <table class="table">
+                        <table class="table" id="js-employee-table">
                             <thead>
                                 <tr>
                                     <th scope="col">STT</th>
-                                    <th scope="col">Tên đăng nhập</th>
+                                    <th scope="col">Họ và tên</th>
                                     <th scope="col">Mã nhân viên</th>
+                                    <th scope="col">Địa chỉ</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Số điện thoại</th>
+                                    <th scope="col">Vị trí</th>
+                                    <th scope="col">Phòng ban</th>
                                     <th scope="col" colspan="4" class="text-center">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td><a href=<?=BASE_URL.'?controller=Pages&action=UserInformation&id=1'?>><i
-                                                class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
-                                    <td><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></td>
 
-                                </tr>
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">
@@ -71,6 +68,30 @@ require CLIENT.'/View/Navbar.php';
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script>
+    fetch("<?=BASE_URL?>" + 'server/controller/admin.controller.php?action=getAllUsers').then(res => res.json())
+        .then(data => {
+            console.log(data);
+            const employeeTable = document.querySelector('#js-employee-table tbody');
+            data.forEach((user, index) => {
+                employeeTable.innerHTML += `<tr>
+                                    <th scope="row">${index+1}</th>
+                                    <td>${user.FullName}</td>
+                                    <td>${user.EmployeeID}</td>
+                                    <td>${user.Address}</td>
+                                    <td>${user.Email}</td>
+                                    <td>${user.MobilePhone}</td>
+                                    <td>${user.Position}</td>
+                                    <td>${user.DepartmentName}</td>
+                                    <td><a href=<?=BASE_URL.'?controller=Pages&action=UserInformation&id='?>${user.EmployeeID}><i
+                                                class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
+                                    <td><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></td>
+
+                                </tr>
+                                `;
+            })
+        })
     </script>
 </body>
 

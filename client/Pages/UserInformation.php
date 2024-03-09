@@ -21,7 +21,7 @@
                         <img src="" alt="User Avatar" class="rounded img-thumbnail " id="js-image-preview">
                     </div>
                     <div class="card-body">
-                        <h3>John Doe</h3>
+                        <h3 id="js-preview-name"></h3>
                         <form id="edit-user-form" method="post" action=<?=isset($_GET['id'])?
                             BASE_URL.'server/controller/user.controller.php?id='.$_GET['id']:
                             BASE_URL.'server/controller/user.controller.php'?> enctype="multipart/form-data">
@@ -52,19 +52,23 @@
         </div>
     </div>
     <script>
-    const isGetData = <?= isset($_GET['id']) ? true : false; ?>;
+    const isGetData = <?= isset($_GET['id']) ? "true" : "false"; ?>;
     const responseLink = isGetData ?
-        "<?=BASE_URL.'server/controller/admin.controller.php?id='.$_GET['id'] ?>" :
-        "<?=BASE_URL.'server/controller/user.controller.php'?>";
+        "<?=isset($_GET['id']) ? BASE_URL.'server/controller/admin.controller.php?id='.$_GET['id'] :
+        "ID not defined"; ?>" : "<?=BASE_URL.'server/controller/user.controller.php'?>";
     console.log(responseLink);
+
     fetch(responseLink).then(res => res.json()).then(data => {
         // console.log("<?=UPLOAD?>" + "/" + data.avatar);
         console.log(data);
         document.getElementById("js-image-preview").src = "<?=BASE_URL?>assets/uploads/images/" + data
             .Avatar;
+        document.getElementById("js-preview-name").innerText = data.FullName;
         document.getElementById("name").value = data.FullName;
         document.getElementById("email").value = data.Email;
         document.getElementById("phone").value = data.MobilePhone;
+        document.getElementById("address").value = data.Address;
+        document.getElementById("position").value = data.Position;
     }).catch(console.log);
     </script>
 

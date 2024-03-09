@@ -29,40 +29,43 @@ require CLIENT.'/View/Banner.php';
     indigo,
     violet
   );">Danh sách giảng viên</div>
-        <table class="table table-hover table-dark">
+        <table class="table table-hover table-dark" id="js-employee-table">
             <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Tên</th>
-                    <th scope="col">Vị trí</th>
-                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">STT</th>
+                    <th scope="col">Họ và tên</th>
+                    <th scope="col">Mã nhân viên</th>
+                    <th scope="col">Địa chỉ</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Vị trí</th>
+                    <th scope="col">Phòng ban</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>02258252552</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="1">Larry the Bird</td>
-                    <td>trưởng khoa</td>
-                    <td>@twitter</td>
-                    <td>@mdo</td>
-                </tr>
+
             </tbody>
         </table>
+        <script>
+        fetch("<?=BASE_URL?>" + 'server/controller/employees.controller.php?action=getAllUsers').then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const employeeTable = document.querySelector('#js-employee-table tbody');
+                data.forEach((user, index) => {
+                    employeeTable.innerHTML += `<tr>
+                                    <th scope="row">${index+1}</th>
+                                    <td>${user.FullName}</td>
+                                    <td>${user.EmployeeID}</td>
+                                    <td>${user.Address}</td>
+                                    <td>${user.Email}</td>
+                                    <td>${user.MobilePhone}</td>
+                                    <td>${user.Position}</td>
+                                    <td>${user.DepartmentName}</td>
+                                </tr>
+                                `;
+                })
+            })
+        </script>
 </body>
 
 </html>
