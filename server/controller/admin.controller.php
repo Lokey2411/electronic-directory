@@ -142,6 +142,5 @@
             }
         }
         // handle get all user
-           
     }
 ?>

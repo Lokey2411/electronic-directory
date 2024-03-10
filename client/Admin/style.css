@@ -1,0 +1,21 @@
+body {
+	background-color: red;
+}
+
+.model {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.form-group.col-md-6 {
+	/* margin: 0 8px; */
+	margin-right: 6px;
+}
+
+.p-6 {
+	padding: 24px;
+}
+
+.form-row {
+	display: flex;
+	margin-top: 8px;
+}

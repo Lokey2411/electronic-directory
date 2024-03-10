@@ -47,7 +47,7 @@ require CLIENT.'/View/Banner.php';
         </table>
         <!-- pagination -->
         <script>
-        fetch("<?=BASE_URL?>" + 'server/controller/departments.controller.php?action=getAllUsers')
+        fetch("<?=BASE_URL?>" + 'server/controller/departments.controller.php')
             .then(res => res.json())
             .then(data => {
                 console.log(data);

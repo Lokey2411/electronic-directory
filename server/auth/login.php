@@ -12,7 +12,6 @@
             $_SESSION["username"] = $username;
             $_SESSION["password"] = $password;
             $_SESSION["Role"] = $user["Role"];
-            echo json_encode(array('status' => 'success'));
             navigate(BASE_URL."");
         }
         else{

@@ -1,5 +1,5 @@
 <?php
-require CLIENT.'/View/Navbar.php';
+require CLIENT . '/View/Navbar.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,13 +7,15 @@ require CLIENT.'/View/Navbar.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
+</head>
+<style>
     .model {
         background-color: rgba(0, 0, 0, 0.2);
     }
@@ -29,9 +31,9 @@ require CLIENT.'/View/Navbar.php';
 
     .form-row {
         display: flex;
+        margin-top: 8px;
     }
-    </style>
-</head>
+</style>
 
 <body>
     <div class="container-fluid">
@@ -43,7 +45,7 @@ require CLIENT.'/View/Navbar.php';
                 <div class="row">
                     <div class="col-md">
                         <h3 class="text-center text-primary">DANH SÁCH NHÂN VIÊN</h3>
-                        <?php include_once CLIENT."/NoticeAuthentication/GetError.php"?>
+                        <?php include_once CLIENT . "/NoticeAuthentication/GetError.php" ?>
                         <button type="button" id="js-add-employee" class="btn btn-primary">Thêm mới</button>
                         <table class="table w-100 mw-100" id="js-employee-table">
                             <thead>
@@ -101,7 +103,7 @@ require CLIENT.'/View/Navbar.php';
             align-items-center">
                 <div class="bg-white rounded-3 p-6 w-50 h-50">
                     <form class="w-100"
-                        action="<?=BASE_URL.'server/controller/admin.controller.php?action=insertEmployee'?>"
+                        action="<?= BASE_URL . 'server/controller/admin.controller.php?action=insertEmployee' ?>"
                         method="post">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -153,7 +155,7 @@ require CLIENT.'/View/Navbar.php';
             align-items-center">
                 <div class="bg-white rounded-3 p-6 w-50 h-50">
                     <form class="w-100"
-                        action="<?=BASE_URL.'server/controller/admin.controller.php?action=insertDepartment'?>"
+                        action="<?= BASE_URL . 'server/controller/admin.controller.php?action=insertDepartment' ?>"
                         method="post">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -207,137 +209,137 @@ require CLIENT.'/View/Navbar.php';
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+        </script>
     <script id="fetch-users">
-    fetch("<?=BASE_URL?>" + 'server/controller/admin.controller.php?action=getAllUsers').then(res => res.json())
-        .then(data => {
-            console.log(data);
-            const employeeTable = document.querySelector('#js-employee-table tbody');
-            pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
-                edit: "UserInformation",
-                delete: "deleteEmployee"
-            });
-            let pageSize = 10;
-            let currentPage = 1;
-            let totalPage = Math.ceil(data.length / pageSize);
-            let startIndex = (currentPage - 1) * pageSize;
-            let paginationHtml = "";
-            for (let i = 0; i < totalPage; i++) {
-                paginationHtml +=
-                    `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i+1}</a></li>`;
-            }
-            const paginationElement = document.querySelector('#js-pagination');
-            paginationElement.innerHTML = paginationHtml;
-            // event click button phân trang
+        fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllUsers').then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const employeeTable = document.querySelector('#js-employee-table tbody');
+                pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
+                    edit: "UserInformation",
+                    delete: "deleteEmployee"
+                });
+                let pageSize = 10;
+                let currentPage = 1;
+                let totalPage = Math.ceil(data.length / pageSize);
+                let startIndex = (currentPage - 1) * pageSize;
+                let paginationHtml = "";
+                for (let i = 0; i < totalPage; i++) {
+                    paginationHtml +=
+                        `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+                }
+                const paginationElement = document.querySelector('#js-pagination');
+                paginationElement.innerHTML = paginationHtml;
+                // event click button phân trang
 
-            paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
-                function() {
-                    const page = this.getAttribute('data-page');
-                    const pageSize = this.getAttribute('data-pagesize');
-                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
-                        "EmployeeID", {
+                paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
+                    function () {
+                        const page = this.getAttribute('data-page');
+                        const pageSize = this.getAttribute('data-pagesize');
+                        pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
+                            "EmployeeID", {
                             edit: "UserInformation",
                             delete: "deleteEmployee"
                         });
-                }));
-        })
-        .catch(console.log)
+                    }));
+            })
+            .catch(console.log)
     </script>
     <script id="fetch-departments">
-    fetch("<?=BASE_URL?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res.json())
-        .then(data => {
-            console.log(data);
-            const departmentSelect = document.querySelector('#department');
-            const parentDepartmentSelect = document.querySelector('#parent-department');
-            data.forEach(item => {
-                departmentSelect.innerHTML +=
-                    `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`;
-                parentDepartmentSelect.innerHTML +=
-                    `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
-            })
-            const employeeTable = document.querySelector('#js-department-table tbody');
-            pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
-                edit: "DepartmentInformation",
-                delete: "deleteDepartment"
-            });
-            let pageSize = 10;
-            let currentPage = 1;
-            let totalPage = Math.ceil(data.length / pageSize);
-            let startIndex = (currentPage - 1) * pageSize;
-            let paginationHtml = "";
-            for (let i = 0; i < totalPage; i++) {
-                paginationHtml +=
-                    `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i+1}</a></li>`;
-            }
-            const paginationElement = document.querySelector('#js-pagination');
-            paginationElement.innerHTML = paginationHtml;
-            // event click button phân trang
+        fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const departmentSelect = document.querySelector('#department');
+                const parentDepartmentSelect = document.querySelector('#parent-department');
+                data.forEach(item => {
+                    departmentSelect.innerHTML +=
+                        `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`;
+                    parentDepartmentSelect.innerHTML +=
+                        `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
+                })
+                const employeeTable = document.querySelector('#js-department-table tbody');
+                pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
+                    edit: "DepartmentInformation",
+                    delete: "deleteDepartment"
+                });
+                let pageSize = 10;
+                let currentPage = 1;
+                let totalPage = Math.ceil(data.length / pageSize);
+                let startIndex = (currentPage - 1) * pageSize;
+                let paginationHtml = "";
+                for (let i = 0; i < totalPage; i++) {
+                    paginationHtml +=
+                        `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+                }
+                const paginationElement = document.querySelector('#js-pagination');
+                paginationElement.innerHTML = paginationHtml;
+                // event click button phân trang
 
-            paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
-                function() {
-                    const page = this.getAttribute('data-page');
-                    const pageSize = this.getAttribute('data-pagesize');
-                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-departmennt-table tbody",
-                        "DepartmentID", {
+                paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
+                    function () {
+                        const page = this.getAttribute('data-page');
+                        const pageSize = this.getAttribute('data-pagesize');
+                        pagination(page * pageSize, parseInt(pageSize, 10), data, "js-departmennt-table tbody",
+                            "DepartmentID", {
                             edit: "DepartmentInformation",
                             delete: "deleteDepartment"
                         });
-                }));
-        })
-        .catch(console.log)
+                    }));
+            })
+            .catch(console.log)
     </script>
     <script>
-    function createInput(name, placeholder, type = "text") {
-        const input = document.createElement('input');
-        input.type = type;
-        input.name = name;
-        input.placeholder = placeholder;
-        return input;
-    }
-    const toggleModal = (modal) => {
-        modal.classList.toggle("d-none");
-    }
+        function createInput(name, placeholder, type = "text") {
+            const input = document.createElement('input');
+            input.type = type;
+            input.name = name;
+            input.placeholder = placeholder;
+            return input;
+        }
+        const toggleModal = (modal) => {
+            modal.classList.toggle("d-none");
+        }
 
-    function pagination(startIndex, pageSize, data, table, keyField, actions) {
-        let html = "";
-        const endIndex = Math.min(startIndex + pageSize, data.length);
-        for (let i = startIndex; i < endIndex; i++) {
-            const item = data[i];
-            html += `<tr> 
-                    <th scope="row">${i+1}</th>`
-            Object.keys(item).forEach(
-                key => {
-                    html += `<td>${item[key]}</td>`
-                }
-            )
-            html += `
-                <td><a href=<?=BASE_URL?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
-                                    <td><a href=<?=BASE_URL?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
+        function pagination(startIndex, pageSize, data, table, keyField, actions) {
+            let html = "";
+            const endIndex = Math.min(startIndex + pageSize, data.length);
+            for (let i = startIndex; i < endIndex; i++) {
+                const item = data[i];
+                html += `<tr> 
+                    <th scope="row">${i + 1}</th>`
+                Object.keys(item).forEach(
+                    key => {
+                        html += `<td>${item[key]}</td>`
+                    }
+                )
+                html += `
+                <td><a href=<?= BASE_URL ?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
+                                    <td><a href=<?= BASE_URL ?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
 
             </tr>`;
+            }
+            document.querySelector('#' + table).innerHTML = html;
         }
-        document.querySelector('#' + table).innerHTML = html;
-    }
-    document.getElementById('js-add-employee').addEventListener('click', function() {
-        const modal = document.getElementById('js-employee-modal');
-        toggleModal(modal);
-    });
-    document.getElementById('js-close-employee-modal').addEventListener('click', function() {
-        const modal = document.getElementById('js-employee-modal');
-        if (modal) {
+        document.getElementById('js-add-employee').addEventListener('click', function () {
+            const modal = document.getElementById('js-employee-modal');
             toggleModal(modal);
-        }
-    });
-    document.getElementById('js-add-department').addEventListener('click', function() {
-        const modal = document.getElementById('js-department-modal');
-        toggleModal(modal);
-    })
-    document.getElementById('js-close-department-modal').addEventListener('click', function() {
-        const modal = document.getElementById('js-department-modal');
-        if (modal) {
+        });
+        document.getElementById('js-close-employee-modal').addEventListener('click', function () {
+            const modal = document.getElementById('js-employee-modal');
+            if (modal) {
+                toggleModal(modal);
+            }
+        });
+        document.getElementById('js-add-department').addEventListener('click', function () {
+            const modal = document.getElementById('js-department-modal');
             toggleModal(modal);
-        }
-    })
+        })
+        document.getElementById('js-close-department-modal').addEventListener('click', function () {
+            const modal = document.getElementById('js-department-modal');
+            if (modal) {
+                toggleModal(modal);
+            }
+        })
     </script>
 
 </html>
