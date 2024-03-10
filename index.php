@@ -18,3 +18,12 @@ else{
 }
 // header("Location: client/");
 ?>
+
+<script>
+fetch("<?=BASE_URL.'/server/controller/employees.controller.php'?>").then(res => res.json())
+    .then(data => {
+        const user = data.find(user => user.EmployeeID == <?=$_SESSION["EmployeeID"]?>);
+        console.log(user);
+        document.getElementById("js-avatar").src = "assets/uploads/images/" + user.Avatar;
+    })
+</script>

@@ -42,6 +42,15 @@
                                 <label for="phone">Số điện thoại:</label>
                                 <input type="tel" class="form-control" id="phone" value="+1234567890" name="phone">
                             </div>
+                            <div class="form-group">
+                                <label for="address">Địa chỉ:</label>
+                                <input type="text" class="form-control" id="address" value="+1234567890" name="address">
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Vị trí:</label>
+                                <input type="tel" class="form-control" id="position" value="+1234567890" name="position"
+                                    <?=isset($_SESSION['Role'])&&$_SESSION['Role']=="Admin"? "" : "disabled"?> />
+                            </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success mt-1">Lưu</button>
                             </div>

@@ -52,10 +52,11 @@
         $name = $_POST["name"];
         $email = $_POST["email"];
         $phone = $_POST["phone"];
+        $address = $_POST["address"];
         $avatar = uploadImage();
         $sql = $avatar!==null?
-        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = '$EmployeeID'":
-        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = '$EmployeeID'";   
+        "UPDATE employees SET FullName = '$name', Email = '$email', Address = '$address', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = '$EmployeeID'":
+        "UPDATE employees SET FullName = '$name', Email = '$email', Address = '$address', MobilePhone = '$phone' WHERE EmployeeID = '$EmployeeID'";   
         $result = queryCommand($sql);
             //insert data into database 
         if($result){
@@ -71,10 +72,12 @@
         $name = $_POST["name"];
         $email = $_POST["email"];
         $phone = $_POST["phone"];
+        $address = $_POST["address"];
+        $position = $_POST["position"];
         $avatar = uploadImage();
         $sql = $avatar!==null?
-        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = $EmployeeID":
-        "UPDATE employees SET FullName = '$name', Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = $EmployeeID";
+        "UPDATE employees SET FullName = '$name', Address = '$address', Position = '$position',  Email = '$email', MobilePhone = '$phone', avatar = '$avatar' WHERE EmployeeID = $EmployeeID":
+        "UPDATE employees SET FullName = '$name', Address = '$address', Position = '$position',  Email = '$email', MobilePhone = '$phone' WHERE EmployeeID = $EmployeeID";
         $result = queryCommand($sql);
         if($result){
             navigate(BASE_URL."");
@@ -109,8 +112,9 @@
                     }
                     else{
                         updateInformationWithSession();
+                        navigate(BASE_URL."");
                     }
-                    navigate($requestUrl ."&error=Bạn không thể chỉnh sửa thông tin");
+                    // navigate($requestUrl ."&error=Bạn không thể chỉnh sửa thông tin");
                 }
             }
             else{
