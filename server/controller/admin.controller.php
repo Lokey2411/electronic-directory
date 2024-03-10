@@ -82,7 +82,6 @@
                     insertEmployee();
                     break;
                 case "insertDepartment":
-                    echo "hển";
                     insertDepartment();
                     break;
                 default:

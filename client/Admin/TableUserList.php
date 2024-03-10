@@ -213,7 +213,10 @@ require CLIENT.'/View/Navbar.php';
         .then(data => {
             console.log(data);
             const employeeTable = document.querySelector('#js-employee-table tbody');
-            pagination(0, 10, data, "js-employee-table tbody");
+            pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
+                edit: "UserInformation",
+                delete: "deleteEmployee"
+            });
             let pageSize = 10;
             let currentPage = 1;
             let totalPage = Math.ceil(data.length / pageSize);
@@ -231,7 +234,11 @@ require CLIENT.'/View/Navbar.php';
                 function() {
                     const page = this.getAttribute('data-page');
                     const pageSize = this.getAttribute('data-pagesize');
-                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody");
+                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
+                        "EmployeeID", {
+                            edit: "UserInformation",
+                            delete: "deleteEmployee"
+                        });
                 }));
         })
         .catch(console.log)
@@ -249,7 +256,10 @@ require CLIENT.'/View/Navbar.php';
                     `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
             })
             const employeeTable = document.querySelector('#js-department-table tbody');
-            pagination(0, 10, data, "js-department-table tbody");
+            pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
+                edit: "DepartmentInformation",
+                delete: "deleteDepartment"
+            });
             let pageSize = 10;
             let currentPage = 1;
             let totalPage = Math.ceil(data.length / pageSize);
@@ -267,7 +277,11 @@ require CLIENT.'/View/Navbar.php';
                 function() {
                     const page = this.getAttribute('data-page');
                     const pageSize = this.getAttribute('data-pagesize');
-                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-departmennt-table tbody");
+                    pagination(page * pageSize, parseInt(pageSize, 10), data, "js-departmennt-table tbody",
+                        "DepartmentID", {
+                            edit: "DepartmentInformation",
+                            delete: "deleteDepartment"
+                        });
                 }));
         })
         .catch(console.log)
@@ -284,7 +298,7 @@ require CLIENT.'/View/Navbar.php';
         modal.classList.toggle("d-none");
     }
 
-    function pagination(startIndex, pageSize, data, table) {
+    function pagination(startIndex, pageSize, data, table, keyField, actions) {
         let html = "";
         const endIndex = Math.min(startIndex + pageSize, data.length);
         for (let i = startIndex; i < endIndex; i++) {
@@ -297,8 +311,8 @@ require CLIENT.'/View/Navbar.php';
                 }
             )
             html += `
-                <td><a href=<?=BASE_URL.'?controller=Pages&action=UserInformation&id='?>${item.DepartmentID}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
-                                    <td><a href=<?=BASE_URL.'server/controller/admin.controller.php?action=deleteDepartment&id='?>${item.DepartmentID}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
+                <td><a href=<?=BASE_URL?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
+                                    <td><a href=<?=BASE_URL?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
 
             </tr>`;
         }

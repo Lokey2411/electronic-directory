@@ -36,7 +36,7 @@ function Navbar()
               Danh sách danh bạ
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href='.BASE_URL.'?controller=Pages&action=Departments>Danh bạ đơn vị</a></li>
+              <li><a class="dropdown-item" href='.BASE_URL.'?controller=Pages&action=DepartmentsList>Danh bạ đơn vị</a></li>
               <li><a class="dropdown-item" href='.BASE_URL.'?controller=Pages&action=UserList>Danh bạ giảng viên</a></li>
             </ul>
           </li>'.$adminItem.$authItem.'
