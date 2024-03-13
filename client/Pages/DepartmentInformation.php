@@ -1,5 +1,5 @@
 <?php
-    session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,19 +18,20 @@
             <div class="col-md-6">
                 <div class="card user-info">
                     <div class="text-center">
-                        <img src="" alt="User Avatar" class="rounded img-thumbnail " id="js-image-preview">
+                        <img src="assets/images/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png"
+                            alt="User Avatar" class="rounded img-thumbnail " id="js-image-preview">
                     </div>
                     <div class="card-body">
                         <h3 id="js-preview-name"></h3>
-                        <form id="edit-user-form" method="post" action=<?=isset($_GET['id'])?
-                            BASE_URL.'server/controller/departments.controller.php?id='.$_GET['id']:
-                            BASE_URL.'server/controller/departments.controller.php'?> enctype="multipart/form-data">
-                            <?php include_once CLIENT.'/NoticeAuthentication/getError.php' ?>
+                        <form id="edit-user-form" method="post" action=<?= isset($_GET['id']) ?
+                            BASE_URL . 'server/controller/departments.controller.php?id=' . $_GET['id'] :
+                            BASE_URL . 'server/controller/departments.controller.php' ?> enctype="multipart/form-data">
+                            <?php include_once CLIENT . '/NoticeAuthentication/getError.php' ?>
                             <label for="logo">Chỉnh sửa ảnh đại diện:</label>
                             <input type="file" name="logo" id="js-upload-image" />
                             <div class="form-group">
                                 <label for="name">Tên:</label>
-                                <input type="text" class="form-control" id="name" value="<?=$_SESSION['username']?>"
+                                <input type="text" class="form-control" id="name" value="<?= $_SESSION['username'] ?>"
                                     name="name">
                             </div>
                             <div class="form-group">
@@ -68,33 +69,37 @@
         </div>
     </div>
     <script>
-    fetch("<?=BASE_URL?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res.json())
-        .then(data => {
-            console.log(data);
-            const parentDepartmentSelect = document.querySelector('#parent-department');
-            data.forEach(item => {
-                parentDepartmentSelect.innerHTML +=
-                    `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
-            })
-        }).catch(console.log);
-    const responseLink = "<?=BASE_URL.'server/controller/departments.controller.php'?>";
-    console.log(responseLink);
+        fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const parentDepartmentSelect = document.querySelector('#parent-department');
+                data.forEach(item => {
+                    parentDepartmentSelect.innerHTML +=
+                        `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
+                })
+            }).catch(console.log);
+        const responseLink = "<?= BASE_URL . 'server/controller/departments.controller.php' ?>";
+        console.log(responseLink);
 
-    fetch(responseLink).then(res => res.json()).then(data => {
-        // console.log("<?=UPLOAD?>" + "/" + data.avatar);
-        console.log(data);
-        const department = data.find(department => department.DepartmentID ==
-            <?=isset($_GET['id']) ? $_GET['id'] : 0?>);
-        document.getElementById("js-image-preview").src = "<?=BASE_URL?>assets/uploads/images/" + department
-            .Logo;
-        document.getElementById("js-preview-name").innerText = department.DepartmentName;
-        document.getElementById("name").value = department.DepartmentName;
-        document.getElementById("email").value = department.Email;
-        document.getElementById("phone").value = department.Phone;
-        document.getElementById("address").value = department.Address;
-        document.getElementById("website").value = department.Website;
-        document.getElementById("parent-department").value = department.ParentDepartmentID;
-    }).catch(console.log);
+        fetch(responseLink).then(res => res.json()).then(data => {
+            // console.log("<?= UPLOAD ?>" + "/" + data.avatar);
+            console.log(data);
+            const department = data.find(department => department.DepartmentID ==
+                <?= isset($_GET['id']) ? $_GET['id'] : 0 ?>);
+            fetch("assets/uploads/images/" + department.Avatar).then(res => {
+                if (res.ok) {
+                    document.getElementById("js-image-preview").src = "assets/uploads/images/" + department
+                        .Avatar;
+                }
+            })
+            document.getElementById("js-preview-name").innerText = department.DepartmentName;
+            document.getElementById("name").value = department.DepartmentName;
+            document.getElementById("email").value = department.Email;
+            document.getElementById("phone").value = department.Phone;
+            document.getElementById("address").value = department.Address;
+            document.getElementById("website").value = department.Website;
+            document.getElementById("parent-department").value = department.ParentDepartmentID;
+        }).catch(console.log);
     </script>
 
 

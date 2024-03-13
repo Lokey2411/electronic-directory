@@ -1,6 +1,6 @@
 <?php
-require CLIENT.'/View/Navbar.php';
-require CLIENT.'/View/Banner.php';
+require CLIENT . '/View/Navbar.php';
+require CLIENT . '/View/Banner.php';
 
 ?>
 <!DOCTYPE html>
@@ -46,15 +46,17 @@ require CLIENT.'/View/Banner.php';
             </tbody>
         </table>
         <!-- pagination -->
+        <ul id="js-pagination" class="pagination"></ul>
+
         <script>
-        fetch("<?=BASE_URL?>" + 'server/controller/departments.controller.php')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                const departmentTable = document.querySelector('#js-department-table tbody');
-                data.forEach((user, index) => {
-                    departmentTable.innerHTML += `<tr>
-                                    <th scope="row">${index+1}</th>
+        function pagination(startIndex, pageSize, data) {
+            let html = "";
+            const endIndex = Math.min(startIndex + pageSize, data.length);
+            for (let i = startIndex; i < endIndex; i++) {
+                const user = data[i];
+                const index = i;
+                html += `<tr>
+                                    <th scope="row">${index + 1}</th>
                                     <td>${user.DepartmentName}</td>
                                     <td>${user.DepartmentID}</td>
                                     <td>${user.Address}</td>
@@ -64,6 +66,47 @@ require CLIENT.'/View/Banner.php';
                                     <td>${user.ParentDepartmentName}</td>
                                 </tr>
                                 `;
+                document.querySelector('#js-department-table tbody').innerHTML = html;
+            }
+        }
+        fetch("<?= BASE_URL ?>" + 'server/controller/departments.controller.php')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const departmentTable = document.querySelector('#js-department-table tbody');
+                data.forEach((user, index) => {
+                    departmentTable.innerHTML += `<tr>
+                                    <th scope="row">${index + 1}</th>
+                                    <td>${user.DepartmentName}</td>
+                                    <td>${user.DepartmentID}</td>
+                                    <td>${user.Address}</td>
+                                    <td>${user.Email}</td>
+                                    <td>${user.Phone}</td>
+                                    <td><a href="https://${user.Website}">${user.Website}</a></td>
+                                    <td>${user.ParentDepartmentName}</td>
+                                </tr>
+                                `;
+                    let pageSize = 5;
+                    let currentPage = 1;
+                    pagination(0, pageSize, data);
+                    let totalPage = Math.ceil(data.length / pageSize);
+                    let startIndex = (currentPage - 1) * pageSize;
+                    let paginationHtml = "";
+                    for (let i = 0; i < totalPage; i++) {
+                        paginationHtml +=
+                            `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+                    }
+                    const paginationElement = document.querySelector('#js-pagination');
+                    paginationElement.innerHTML = paginationHtml;
+                    // event click button phân trang
+
+                    paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener(
+                        'click',
+                        function() {
+                            const page = this.getAttribute('data-page');
+                            const pageSize = this.getAttribute('data-pagesize');
+                            pagination(page * pageSize, parseInt(pageSize), data, );
+                        }));
                 })
 
             });

@@ -1,6 +1,6 @@
 <?php
-require CLIENT.'/View/Navbar.php';
-require CLIENT.'/View/Banner.php';
+require CLIENT . '/View/Navbar.php';
+require CLIENT . '/View/Banner.php';
 
 ?>
 <!DOCTYPE html>
@@ -34,7 +34,6 @@ require CLIENT.'/View/Banner.php';
                 <tr>
                     <th scope="col">STT</th>
                     <th scope="col">Họ và tên</th>
-                    <th scope="col">Mã nhân viên</th>
                     <th scope="col">Địa chỉ</th>
                     <th scope="col">Email</th>
                     <th scope="col">Số điện thoại</th>
@@ -46,19 +45,21 @@ require CLIENT.'/View/Banner.php';
 
             </tbody>
         </table>
+        <ul id="js-pagination" class="pagination"></ul>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
         </script>
-        <script>
-        fetch("<?=BASE_URL?>" + 'server/controller/employees.controller.php?action=getAllUsers').then(res => res.json())
-            .then(data => {
-                console.log(data);
-                const employeeTable = document.querySelector('#js-employee-table tbody');
-                data.forEach((user, index) => {
-                    employeeTable.innerHTML += `<tr>
-                                    <th scope="row">${index+1}</th>
+</body>
+<script>
+function pagination(startIndex, pageSize, data) {
+    let html = "";
+    const endIndex = Math.min(startIndex + pageSize, data.length);
+    for (let i = startIndex; i < endIndex; i++) {
+        const user = data[i];
+        const index = i;
+        html += `<tr>
+                                    <th scope="row">${index + 1}</th>
                                     <td>${user.FullName}</td>
-                                    <td>${user.EmployeeID}</td>
                                     <td>${user.Address}</td>
                                     <td>${user.Email}</td>
                                     <td>${user.MobilePhone}</td>
@@ -66,9 +67,50 @@ require CLIENT.'/View/Banner.php';
                                     <td>${user.DepartmentName}</td>
                                 </tr>
                                 `;
-                })
-            })
-        </script>
-</body>
+        document.querySelector('#js-employee-table tbody').innerHTML = html;
+    }
+}
+</script>
+<script>
+fetch("<?= BASE_URL ?>" + 'server/controller/employees.controller.php').then(res => res.json())
+    .then(data => {
+        console.log(data);
+        const employeeTable = document.querySelector('#js-employee-table tbody');
+        if (Array.isArray(data)) {
+            data.forEach((user, index) => {
+                employeeTable.innerHTML += `<tr>
+                                    <th scope="row">${index + 1}</th>
+                                    <td>${user.FullName}</td>
+                                    <td>${user.Address}</td>
+                                    <td>${user.Email}</td>
+                                    <td>${user.MobilePhone}</td>
+                                    <td>${user.Position}</td>
+                                    <td>${user.DepartmentName}</td>
+                                </tr>
+                                `;
+            });
+            let pageSize = 10;
+            let currentPage = 1;
+            let totalPage = Math.ceil(data.length / pageSize);
+            let startIndex = (currentPage - 1) * pageSize;
+            let paginationHtml = "";
+            for (let i = 0; i < totalPage; i++) {
+                paginationHtml +=
+                    `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+            }
+            const paginationElement = document.querySelector('#js-pagination');
+            paginationElement.innerHTML = paginationHtml;
+            // event click button phân trang
+
+            paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
+                function() {
+                    const page = this.getAttribute('data-page');
+                    const pageSize = this.getAttribute('data-pagesize');
+                    pagination(page * pageSize, parseInt(pageSize, 10), data);
+                }));
+        }
+        pagination(0, 10, data);
+    })
+</script>
 
 </html>

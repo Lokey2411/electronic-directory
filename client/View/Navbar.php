@@ -42,8 +42,10 @@ function Navbar()
           </li>' . $adminItem . $authItem . '
         </ul>
         </div>
-        <form class="d-flex"  action=' . BASE_URL . 'server/controller/search.controller.php' .
+        <form class="d-flex"  action=' . BASE_URL . '?controller=Pages&action=Search' .
     '  method="get">
+    <input type="hidden" name="controller" value="Pages" />
+<input type="hidden" name="action" value="Search" />
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="js-search" name="item"  />
           <button class="btn btn-outline-success" type="submit">
             Search

@@ -1,15 +1,16 @@
 <?php
-    require "../config.php";
-    function getAllEmployees(){
-        $con = getDBConnection();
-        $result = $con->query("SELECT DISTINCT e.EmployeeID, e.FullName, e.Address, e.Email, e.MobilePhone, e.Position,e. Avatar, d.DepartmentName from employees as e JOIN departments as d ON e.DepartmentID = d.DepartmentID");
-        
-        if($result){
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-        else{
-            return null;
-        }
+require "../config.php";
+function getEmployeeByID($id)
+{
+    $sql = "SELECT * FROM employees where EmployeeID = $id";
+    $result = queryCommand($sql);
+    $num = $result->num_rows;
+    if ($num > 0) {
+        return mysqli_fetch_assoc($result);
     }
+    return null;
+}
+if (isset($_GET["id"]))
+    echo json_encode(getEmployeeByID($_GET["id"]));
+else
     echo json_encode(getAllEmployees());
-?>

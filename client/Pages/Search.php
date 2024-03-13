@@ -1,4 +1,6 @@
 <?php
+// include "../../server/config.php";
+// navigate(BASE_URL . '?controller=Pages&action=Search&item=' . $_GET["item"]);
 require CLIENT . '/View/Navbar.php';
 if (!isset($_GET["item"])) {
     die("404 NOT FOUND");
@@ -61,31 +63,32 @@ if (!isset($_GET["item"])) {
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script>
-    const item = "<?= $_GET["item"] ?>";
-    fetch("<?= BASE_URL ?>" + 'server/controller/search.controller.php?item=' + item).then(res => res
-            .json())
-        .then(data => {
-            const {
-                employees,
-                departments
-            } = data;
-            console.log(employees);
-            console.log(departments);
-            employees.forEach(employee => {
-                const employeeResult = document.getElementById("js-employee-result");
-                const [
-                    FullName,
-                    Email,
-                    MobilePhone,
-                    DepartmentName,
-                    Avatar
-                ] = employee;
-                let htmlCard = `
+    function getResult() {
+        const item = "<?= $_GET["item"] ?>";
+        fetch("<?= BASE_URL ?>" + 'server/controller/search.controller.php?item=' + item).then(res => res
+                .json())
+            .then(data => {
+                const {
+                    employees,
+                    departments
+                } = data;
+                console.log(employees);
+                console.log(departments);
+                employees.forEach(employee => {
+                    const employeeResult = document.getElementById("js-employee-result");
+                    const {
+                        FullName,
+                        Email,
+                        MobilePhone,
+                        DepartmentName,
+                        Avatar
+                    } = employee;
+                    let htmlCard = `
                  <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
                             <img src="assets/uploads/images/${Avatar}"
-                                class="card-img" alt="Avatar của ${FullName}">
+                                class="card-img" alt="Avatar của ${FullName}" onerror= "this.src= 'assets/images/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -98,20 +101,24 @@ if (!isset($_GET["item"])) {
                     </div>
                 </div>
                 `
-                employeeResult.innerHTML += htmlCard;
-            });
-            departments.forEach(department => {
-                const departmentResult = document.getElementById("js-department-result");
-                const [
-                    DepartmentName,
-                    Address,
-                    Email, Phone, Website, Logo, ParentDepartmentName
-                ] = department;
-                let htmlCard = `
+                    employeeResult.innerHTML += htmlCard;
+                });
+                departments.forEach(department => {
+                    const departmentResult = document.getElementById("js-department-result");
+                    const {
+                        DepartmentName,
+                        Address,
+                        Email,
+                        Phone,
+                        Website,
+                        Logo,
+                        ParentDepartmentName
+                    } = department;
+                    let htmlCard = `
                     <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="assets/uploads/images/${Logo}" class="card-img" alt="Logo của ${DepartmentName}">
+                            <img src="assets/uploads/images/${Logo}" class="card-img" alt="" onerror= "this.src= 'assets/images/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -125,9 +132,11 @@ if (!isset($_GET["item"])) {
                         </div>
                     </div>
                 </div>`;
-                departmentResult.innerHTML += htmlCard;
+                    departmentResult.innerHTML += htmlCard;
+                })
             })
-        })
+    }
+    getResult();
     </script>
 </body>
 

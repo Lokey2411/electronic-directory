@@ -16,23 +16,28 @@ require CLIENT . '/View/Navbar.php';
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <style>
-    .model {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
+.model {
+    background-color: rgba(0, 0, 0, 0.2);
+}
 
-    .form-group.col-md-6 {
-        /* margin: 0 8px; */
-        margin-right: 6px;
-    }
+.form-group.col-md-6 {
+    /* margin: 0 8px; */
+    margin-right: 6px;
+}
 
-    .p-6 {
-        padding: 24px;
-    }
+.p-6 {
+    padding: 24px;
+}
 
-    .form-row {
-        display: flex;
-        margin-top: 8px;
-    }
+.form-row {
+    display: flex;
+    margin-top: 8px;
+}
+
+#js-input-search:focus {
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
 </style>
 
 <body>
@@ -41,6 +46,7 @@ require CLIENT . '/View/Navbar.php';
         echo Navbar();
         ?>
         <main class="mt-3 w-100">
+            <input type="search" name="" id="js-input-search" placeholder="Filter" class="rounded-2 outline-none p-2" />
             <div class="container">
                 <div class="row">
                     <div class="col-md">
@@ -143,7 +149,7 @@ require CLIENT . '/View/Navbar.php';
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Gửi</button>
+                        <button type="submit" class="btn btn-primary">Thêm</button>
                         <button type="button" class="btn btn-secondary" id="js-close-employee-modal">Đóng</button>
                     </form>
 
@@ -195,7 +201,7 @@ require CLIENT . '/View/Navbar.php';
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Gửi</button>
+                        <button type="submit" class="btn btn-primary">Thêm</button>
                         <button type="button" class="btn btn-secondary" id="js-close-department-modal">Đóng</button>
                     </form>
 
@@ -209,44 +215,114 @@ require CLIENT . '/View/Navbar.php';
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-        </script>
+    </script>
+    <script>
+    const forbidden = ["Avatar", "Logo", "ParentDepartmentID"];
+
+    function pagination(startIndex, pageSize, data, table, keyField, actions) {
+        let html = "";
+        const endIndex = Math.min(startIndex + pageSize, data.length);
+        for (let i = startIndex; i < endIndex; i++) {
+            const item = data[i];
+            html += `<tr> 
+                    <th scope="row">${i + 1}</th>`
+            Object.keys(item).forEach(
+                key => {
+                    if (!forbidden.includes(key))
+                        html += `<td>${item[key]}</td>`
+                }
+            )
+            html += `
+                <td><a href=<?= BASE_URL ?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
+                                        <td><a href=<?= BASE_URL ?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
+    
+                </tr>`;
+        }
+        document.querySelector('#' + table).innerHTML = html;
+    }
+    </script>
     <script id="fetch-users">
+    function updateEmployeeTable(data) {
+        const employeeTable = document.querySelector('#js-employee-table tbody');
+        pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
+            edit: "UserInformation",
+            delete: "deleteEmployee"
+        });
+        pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
+            edit: "UserInformation",
+            delete: "deleteEmployee"
+        });
+        let pageSize = 10;
+        let currentPage = 1;
+        let totalPage = Math.ceil(data.length / pageSize);
+        let startIndex = (currentPage - 1) * pageSize;
+        let paginationHtml = "";
+        for (let i = 0; i < totalPage; i++) {
+            paginationHtml +=
+                `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+        }
+        const paginationElement = document.querySelector('#js-pagination');
+        paginationElement.innerHTML = paginationHtml;
+        // event click button phân trang
+
+        paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
+            function() {
+                const page = this.getAttribute('data-page');
+                const pageSize = this.getAttribute('data-pagesize');
+                pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
+                    "EmployeeID", {
+                        edit: "UserInformation",
+                        delete: "deleteEmployee"
+                    });
+            }));
+    }
+
+    function fetchEmployees() {
         fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllUsers').then(res => res.json())
             .then(data => {
                 console.log(data);
-                const employeeTable = document.querySelector('#js-employee-table tbody');
-                pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
-                    edit: "UserInformation",
-                    delete: "deleteEmployee"
-                });
-                let pageSize = 10;
-                let currentPage = 1;
-                let totalPage = Math.ceil(data.length / pageSize);
-                let startIndex = (currentPage - 1) * pageSize;
-                let paginationHtml = "";
-                for (let i = 0; i < totalPage; i++) {
-                    paginationHtml +=
-                        `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
-                }
-                const paginationElement = document.querySelector('#js-pagination');
-                paginationElement.innerHTML = paginationHtml;
-                // event click button phân trang
-
-                paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
-                    function () {
-                        const page = this.getAttribute('data-page');
-                        const pageSize = this.getAttribute('data-pagesize');
-                        pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
-                            "EmployeeID", {
-                            edit: "UserInformation",
-                            delete: "deleteEmployee"
-                        });
-                    }));
+                updateEmployeeTable(data);
             })
             .catch(console.log)
+    }
+    fetchEmployees();
     </script>
     <script id="fetch-departments">
-        fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res.json())
+    function updateDepartmentTable(data) {
+        const departmentTable = document.querySelector('#js-department-table tbody');
+        pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
+            edit: "DepartmentInformation",
+            delete: "deleteDepartment"
+        });
+        let pageSize = 10;
+        let currentPage = 1;
+        let totalPage = Math.ceil(data.length / pageSize);
+        let startIndex = (currentPage - 1) * pageSize;
+        let paginationHtml = "";
+        for (let i = 0; i < totalPage; i++) {
+            paginationHtml +=
+                `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
+        }
+        const paginationElement = document.querySelector('#js-pagination');
+        paginationElement.innerHTML = paginationHtml;
+        // event click button phân trang
+
+        paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
+            function() {
+                const page = this.getAttribute('data-page');
+                const pageSize = this.getAttribute('data-pagesize');
+                pagination(page * pageSize, parseInt(pageSize, 10), data,
+                    "js-departmennt-table tbody",
+                    "DepartmentID", {
+                        edit: "DepartmentInformation",
+                        delete: "deleteDepartment"
+                    });
+            }));
+    }
+
+    function fetchDepartments() {
+        fetch("<?= BASE_URL ?>" + 'server/controller/admin.controller.php?action=getAllDepartments').then(res => res
+                .json())
             .then(data => {
                 console.log(data);
                 const departmentSelect = document.querySelector('#department');
@@ -257,89 +333,56 @@ require CLIENT . '/View/Navbar.php';
                     parentDepartmentSelect.innerHTML +=
                         `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
                 })
-                const employeeTable = document.querySelector('#js-department-table tbody');
-                pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
-                    edit: "DepartmentInformation",
-                    delete: "deleteDepartment"
-                });
-                let pageSize = 10;
-                let currentPage = 1;
-                let totalPage = Math.ceil(data.length / pageSize);
-                let startIndex = (currentPage - 1) * pageSize;
-                let paginationHtml = "";
-                for (let i = 0; i < totalPage; i++) {
-                    paginationHtml +=
-                        `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
-                }
-                const paginationElement = document.querySelector('#js-pagination');
-                paginationElement.innerHTML = paginationHtml;
-                // event click button phân trang
-
-                paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
-                    function () {
-                        const page = this.getAttribute('data-page');
-                        const pageSize = this.getAttribute('data-pagesize');
-                        pagination(page * pageSize, parseInt(pageSize, 10), data, "js-departmennt-table tbody",
-                            "DepartmentID", {
-                            edit: "DepartmentInformation",
-                            delete: "deleteDepartment"
-                        });
-                    }));
+                updateDepartmentTable(data);
             })
             .catch(console.log)
+    }
+    fetchDepartments();
     </script>
     <script>
-        function createInput(name, placeholder, type = "text") {
-            const input = document.createElement('input');
-            input.type = type;
-            input.name = name;
-            input.placeholder = placeholder;
-            return input;
-        }
-        const toggleModal = (modal) => {
-            modal.classList.toggle("d-none");
-        }
+    const toggleModal = (modal) => {
+        modal.classList.toggle("d-none");
+    }
 
-        function pagination(startIndex, pageSize, data, table, keyField, actions) {
-            let html = "";
-            const endIndex = Math.min(startIndex + pageSize, data.length);
-            for (let i = startIndex; i < endIndex; i++) {
-                const item = data[i];
-                html += `<tr> 
-                    <th scope="row">${i + 1}</th>`
-                Object.keys(item).forEach(
-                    key => {
-                        html += `<td>${item[key]}</td>`
-                    }
-                )
-                html += `
-                <td><a href=<?= BASE_URL ?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
-                                    <td><a href=<?= BASE_URL ?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
-
-            </tr>`;
-            }
-            document.querySelector('#' + table).innerHTML = html;
+    document.getElementById('js-add-employee').addEventListener('click', function() {
+        const modal = document.getElementById('js-employee-modal');
+        toggleModal(modal);
+    });
+    document.getElementById('js-close-employee-modal').addEventListener('click', function() {
+        const modal = document.getElementById('js-employee-modal');
+        if (modal) {
+            toggleModal(modal);
         }
-        document.getElementById('js-add-employee').addEventListener('click', function () {
-            const modal = document.getElementById('js-employee-modal');
+    });
+    document.getElementById('js-add-department').addEventListener('click', function() {
+        const modal = document.getElementById('js-department-modal');
+        toggleModal(modal);
+    })
+    document.getElementById('js-close-department-modal').addEventListener('click', function() {
+        const modal = document.getElementById('js-department-modal');
+        if (modal) {
             toggleModal(modal);
-        });
-        document.getElementById('js-close-employee-modal').addEventListener('click', function () {
-            const modal = document.getElementById('js-employee-modal');
-            if (modal) {
-                toggleModal(modal);
-            }
-        });
-        document.getElementById('js-add-department').addEventListener('click', function () {
-            const modal = document.getElementById('js-department-modal');
-            toggleModal(modal);
-        })
-        document.getElementById('js-close-department-modal').addEventListener('click', function () {
-            const modal = document.getElementById('js-department-modal');
-            if (modal) {
-                toggleModal(modal);
-            }
-        })
+        }
+    })
+    document.getElementById("js-input-search").addEventListener("keyup", e => {
+        const keyword = e.target.value;
+        if (keyword) {
+            fetch("<?= BASE_URL ?>" + 'server/controller/search.controller.php?item=' + keyword)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    const {
+                        employees,
+                        departments
+                    } = data;
+                    updateEmployeeTable(employees);
+                    updateDepartmentTable(departments);
+                })
+        } else {
+            fetchEmployees();
+            fetchDepartments();
+        }
+    })
     </script>
 
 </html>
