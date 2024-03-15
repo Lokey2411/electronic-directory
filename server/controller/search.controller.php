@@ -2,7 +2,7 @@
 require "../config.php";
 function handleSearch($item)
 {
-    $employeeQuery = "SELECT DISTINCT e.EmployeeID, e.FullName, e.Email, e.MobilePhone, e.Position, d.DepartmentName, e.DepartmentID as ParentDepartmentID
+    $employeeQuery = "SELECT DISTINCT e.EmployeeID, e.FullName, e.Address, e.Email, e.MobilePhone, e.Position, d.DepartmentName, e.DepartmentID as ParentDepartmentID
     FROM `employees` AS e 
     INNER JOIN `departments` AS d 
     ON e.DepartmentID = d.DepartmentID 
@@ -17,9 +17,13 @@ function handleSearch($item)
     INNER JOIN `departments` AS p 
     ON d.ParentDepartmentID = p.DepartmentID 
     WHERE d.`DepartmentName` LIKE '%$item%' 
+    or d.Email LIKE '%$item%'
+    or d.Phone LIKE '%$item%'
     AND d.`ParentDepartmentID` != 0
     ORDER BY d.`DepartmentID` ASC";
     $departmentResult = queryCommand($departmentQuery);
+    $resultEmployeeAssoc = [];
+    $resultDepartmentAssoc = [];
     while ($employee = $employeeResult->fetch_assoc()) {
         $resultEmployeeAssoc[] = $employee;
     }

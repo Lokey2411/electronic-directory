@@ -10,6 +10,14 @@ function insertEmployee()
     $phoneNumber = $_POST['phoneNumber'];
     $position = $_POST['position'];
     $department = $_POST['department'];
+    $phoneNumberIsValid = strlen(preg_replace("/[^\d]/", "", $phoneNumber)) == 10 || strlen(preg_replace("/[^\d]/", "", $phoneNumber)) == 11;
+    $isValid = $phoneNumberIsValid;
+    if (!$isValid) {
+        if (!$phoneNumberIsValid) {
+            navigate($requestUrl . "&error=Số điện thoại không hợp lệ");
+        }
+        return;
+    }
     $sql = "INSERT INTO employees (FullName, Email, Address, MobilePhone, Position, DepartmentID) VALUES ('$name', '$email', '$address', '$phoneNumber', '$position', $department);";
     $result = queryCommand($sql);
     if ($result) {
@@ -27,6 +35,14 @@ function insertDepartment()
     $phoneNumber = $_POST['phoneNumber'];
     $website = $_POST['website'];
     $department = $_POST['department'];
+    $phoneNumberIsValid = strlen(preg_replace("/[^\d]/", "", $phoneNumber)) == 10 || strlen(preg_replace("/[^\d]/", "", $phoneNumber)) == 11;
+    $isValid = $phoneNumberIsValid;
+    if (!$isValid) {
+        if (!$phoneNumberIsValid) {
+            navigate($requestUrl . "&error=Số điện thoại không hợp lệ");
+        }
+        return;
+    }
     $sql = "SELECT * FROM departments WHERE DepartmentName = '$name'";
     $result = queryCommand($sql);
     if (mysqli_num_rows($result) == 0) {
@@ -38,7 +54,7 @@ function insertDepartment()
             header("Location: $requestUrl&error=Lỗi truy vấn, thêm thất bại");
         }
     } else
-        navigate($requestUrl . "message=Thêm thất bại, phòng ban $name đã tồn tại");
+        navigate($requestUrl . "&error=Thêm thất bại, phòng ban $name đã tồn tại");
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // handle some post request\

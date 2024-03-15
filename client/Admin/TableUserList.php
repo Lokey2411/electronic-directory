@@ -98,7 +98,7 @@ require CLIENT . '/View/Navbar.php';
                             </tbody>
                         </table>
                         <nav aria-label="Page navigation example">
-                            <ul class="pagination" id="js-pagination">
+                            <ul class="pagination" id="js-department-pagination">
                             </ul>
                         </nav>
                     </div>
@@ -145,7 +145,7 @@ require CLIENT . '/View/Navbar.php';
                                 <label for="department">Phòng ban</label>
                                 <select type="text" class="form-control" id="department" name="department"
                                     placeholder="Nhập phòng ban" class="form-select">
-                                    <option value="">--Chọn phòng ban--</option>
+                                    <option value="0">--Chọn phòng ban--</option>
                                 </select>
                             </div>
                         </div>
@@ -191,21 +191,34 @@ require CLIENT . '/View/Navbar.php';
                             <div class="form-group col-md-6">
                                 <label for="website">Website</label>
                                 <input type="text" class="form-control" id="website" name="website"
-                                    placeholder="Nhập vị trí">
+                                    placeholder="Website của bộ phận">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="department">Phòng ban trực thuộc</label>
                                 <select type="text" class="form-control " id="parent-department" name="department"
                                     placeholder="Nhập phòng ban" class="form-select">
-                                    <option value="">--Chọn phòng ban trực thuộc--</option>
+                                    <option value="0">--Chọn phòng ban trực thuộc--</option>
                                 </select>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Thêm</button>
                         <button type="button" class="btn btn-secondary" id="js-close-department-modal">Đóng</button>
                     </form>
-
-
+                </div>
+            </div>
+            <div id="js-delete-modal"
+                class="fixed-top fixed-bottom model d-flex justify-content-center d-none align-items-center">
+                <div class="container py-3 bg-white rounded-3 shadow-2">
+                    <div class="alert alert-dismissible fade show" role="alert">
+                        <h4 class="alert-heading">Thông báo</h4>
+                        <p id="modal-title">Bạn có muốn xóa không?</p>
+                        <hr />
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-danger modal-confirm ,me-3">Xóa</button>
+                            <button type="button"
+                                class="btn btn-sm btn-outline-primary modal-cancel margin-left-3">Đóng</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -220,6 +233,7 @@ require CLIENT . '/View/Navbar.php';
     const forbidden = ["Avatar", "Logo", "ParentDepartmentID"];
 
     function pagination(startIndex, pageSize, data, table, keyField, actions) {
+        // alert("here")
         let html = "";
         const endIndex = Math.min(startIndex + pageSize, data.length);
         for (let i = startIndex; i < endIndex; i++) {
@@ -234,25 +248,20 @@ require CLIENT . '/View/Navbar.php';
             )
             html += `
                 <td><a href=<?= BASE_URL ?>?controller=Pages&action=${actions.edit}&id=${item[keyField]}><i class="fa-solid fa-eye fs-5 d-flex justify-content-center"></i></a></td>
-                                        <td><a href=<?= BASE_URL ?>server/controller/admin.controller.php?action=${actions.delete}&id=${item[keyField]}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></a></td>
-    
+                <td id='js-delete-${actions.delete}-${item[keyField]}' data-id=${item[keyField]} data-name=${actions.delete}><i class="fa-solid fa-trash fs-5 d-flex justify-content-center "></i></td>
                 </tr>`;
         }
-        document.querySelector('#' + table).innerHTML = html;
+        table.innerHTML = html;
     }
     </script>
     <script id="fetch-users">
     function updateEmployeeTable(data) {
         const employeeTable = document.querySelector('#js-employee-table tbody');
-        pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
+        pagination(0, 5, data, employeeTable, "EmployeeID", {
             edit: "UserInformation",
             delete: "deleteEmployee"
         });
-        pagination(0, 10, data, "js-employee-table tbody", "EmployeeID", {
-            edit: "UserInformation",
-            delete: "deleteEmployee"
-        });
-        let pageSize = 10;
+        let pageSize = 5;
         let currentPage = 1;
         let totalPage = Math.ceil(data.length / pageSize);
         let startIndex = (currentPage - 1) * pageSize;
@@ -264,17 +273,20 @@ require CLIENT . '/View/Navbar.php';
         const paginationElement = document.querySelector('#js-pagination');
         paginationElement.innerHTML = paginationHtml;
         // event click button phân trang
-
         paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
-            function() {
-                const page = this.getAttribute('data-page');
-                const pageSize = this.getAttribute('data-pagesize');
-                pagination(page * pageSize, parseInt(pageSize, 10), data, "js-employee-table tbody",
+            function(e) {
+                e.preventDefault();
+                const page = +this.getAttribute('data-page');
+                // alert("pagination " + page);
+                const pageSize = parseInt(this.getAttribute('data-pagesize'), 10);
+                const employeeTable = document.querySelector('#js-employee-table tbody');
+                pagination(page * pageSize, pageSize, data, employeeTable,
                     "EmployeeID", {
                         edit: "UserInformation",
                         delete: "deleteEmployee"
                     });
             }));
+        assignDeleteHandler("deleteEmployee");
     }
 
     function fetchEmployees() {
@@ -290,11 +302,11 @@ require CLIENT . '/View/Navbar.php';
     <script id="fetch-departments">
     function updateDepartmentTable(data) {
         const departmentTable = document.querySelector('#js-department-table tbody');
-        pagination(0, 10, data, "js-department-table tbody", "DepartmentID", {
+        pagination(0, 5, data, departmentTable, "DepartmentID", {
             edit: "DepartmentInformation",
             delete: "deleteDepartment"
         });
-        let pageSize = 10;
+        let pageSize = 5;
         let currentPage = 1;
         let totalPage = Math.ceil(data.length / pageSize);
         let startIndex = (currentPage - 1) * pageSize;
@@ -303,16 +315,17 @@ require CLIENT . '/View/Navbar.php';
             paginationHtml +=
                 `<li class="page-item" data-page="${i}" data-pagesize="${pageSize}"><a class="page-link" href="#">${i + 1}</a></li>`;
         }
-        const paginationElement = document.querySelector('#js-pagination');
+        const paginationElement = document.querySelector('#js-department-pagination');
         paginationElement.innerHTML = paginationHtml;
         // event click button phân trang
 
         paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
             function() {
-                const page = this.getAttribute('data-page');
-                const pageSize = this.getAttribute('data-pagesize');
-                pagination(page * pageSize, parseInt(pageSize, 10), data,
-                    "js-departmennt-table tbody",
+                const page = +this.getAttribute('data-page');
+                const pageSize = parseInt(this.getAttribute('data-pagesize'));
+                const departmentTable = document.querySelector('#js-department-table tbody');
+                pagination(page * pageSize, pageSize, data,
+                    departmentTable,
                     "DepartmentID", {
                         edit: "DepartmentInformation",
                         delete: "deleteDepartment"
@@ -334,6 +347,7 @@ require CLIENT . '/View/Navbar.php';
                         `<option value="${item.DepartmentID}">${item.DepartmentName}</option>`
                 })
                 updateDepartmentTable(data);
+                assignDeleteHandler("deleteDepartment");
             })
             .catch(console.log)
     }
@@ -383,6 +397,51 @@ require CLIENT . '/View/Navbar.php';
             fetchDepartments();
         }
     })
+    document.getElementById("js-input-search").addEventListener("change", e => {
+        const keyword = e.target.value;
+        if (keyword) {
+            fetch("<?= BASE_URL ?>" + 'server/controller/search.controller.php?item=' + keyword)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    const {
+                        employees,
+                        departments
+                    } = data;
+                    updateEmployeeTable(employees);
+                    updateDepartmentTable(departments);
+                })
+        } else {
+            fetchEmployees();
+            fetchDepartments();
+        }
+    })
+
+    function assignDeleteHandler(action) {
+        const deleteButtons = document.querySelectorAll(`td[id*=js-delete-${action}]`);
+        deleteButtons.forEach(
+            item => item.addEventListener('click', function() {
+                // alert("clicked");
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const table = name == "deleteEmployee" ? "Nhân viên" : "Bộ phận";
+                const modal = document.getElementById("js-delete-modal");
+                const title = document.getElementById("modal-title");
+                console.log(modal);
+                title.innerText = `Bạn có đồng ý xóa ${table} ${id}`;
+                const confirmButton = modal.getElementsByClassName("modal-confirm")[0];
+                confirmButton.onclick = () => {
+                    window.location.href =
+                        `<?= BASE_URL ?>server/controller/admin.controller.php?action=${name}&id=${id}`;
+                }
+                console.log(modal.getElementsByClassName("modal-cancel")[0]);
+                modal.getElementsByClassName("modal-cancel")[0].onclick = () => {
+                    toggleModal(modal);
+                };
+                toggleModal(modal);
+            })
+        )
+    }
     </script>
 
 </html>

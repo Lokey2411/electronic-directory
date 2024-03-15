@@ -53,7 +53,9 @@ require CLIENT . '/View/Banner.php';
 <script>
 function pagination(startIndex, pageSize, data) {
     let html = "";
+    // console.log(data);
     const endIndex = Math.min(startIndex + pageSize, data.length);
+    console.log(startIndex, endIndex);
     for (let i = startIndex; i < endIndex; i++) {
         const user = data[i];
         const index = i;
@@ -67,29 +69,17 @@ function pagination(startIndex, pageSize, data) {
                                     <td>${user.DepartmentName}</td>
                                 </tr>
                                 `;
-        document.querySelector('#js-employee-table tbody').innerHTML = html;
     }
+    // console.log(html);
+    document.querySelector('#js-employee-table tbody').innerHTML = html;
 }
 </script>
 <script>
 fetch("<?= BASE_URL ?>" + 'server/controller/employees.controller.php').then(res => res.json())
     .then(data => {
         console.log(data);
-        const employeeTable = document.querySelector('#js-employee-table tbody');
         if (Array.isArray(data)) {
-            data.forEach((user, index) => {
-                employeeTable.innerHTML += `<tr>
-                                    <th scope="row">${index + 1}</th>
-                                    <td>${user.FullName}</td>
-                                    <td>${user.Address}</td>
-                                    <td>${user.Email}</td>
-                                    <td>${user.MobilePhone}</td>
-                                    <td>${user.Position}</td>
-                                    <td>${user.DepartmentName}</td>
-                                </tr>
-                                `;
-            });
-            let pageSize = 10;
+            let pageSize = 5;
             let currentPage = 1;
             let totalPage = Math.ceil(data.length / pageSize);
             let startIndex = (currentPage - 1) * pageSize;
@@ -104,12 +94,12 @@ fetch("<?= BASE_URL ?>" + 'server/controller/employees.controller.php').then(res
 
             paginationElement.querySelectorAll('.page-item').forEach(item => item.addEventListener('click',
                 function() {
-                    const page = this.getAttribute('data-page');
-                    const pageSize = this.getAttribute('data-pagesize');
-                    pagination(page * pageSize, parseInt(pageSize, 10), data);
+                    const page = +this.getAttribute('data-page');
+                    const pageSize = +this.getAttribute('data-pagesize');
+                    pagination(page * pageSize, pageSize, data);
                 }));
         }
-        pagination(0, 10, data);
+        pagination(0, 5, data);
     })
 </script>
 
